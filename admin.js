@@ -131,18 +131,42 @@ function listenVideos() {
             container.innerHTML = '<p class="admin-empty">कोई वीडियो नहीं जोड़ा गया है।</p>';
             return;
         }
-        container.innerHTML = Object.entries(data).map(([key, v]) => `
+        container.innerHTML = Object.entries(data).map(([key, v]) => {
+            let thumbHtml = '';
+            let u = v.url || '';
+            let typeLabel = 'Direct Video';
+            
+            if (u.includes('youtube.com') || u.includes('youtu.be')) {
+                const ytMatch = u.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([a-zA-Z0-9_-]{11})/);
+                if (ytMatch && ytMatch[1]) {
+                    thumbHtml = `<img src="https://img.youtube.com/vi/${ytMatch[1]}/mqdefault.jpg" class="admin-thumb video-thumb">`;
+                    typeLabel = 'YouTube';
+                }
+            } else if (u.includes('drive.google.com')) {
+                const driveMatch = u.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+                if (driveMatch && driveMatch[1]) {
+                    thumbHtml = `<iframe src="https://drive.google.com/file/d/${driveMatch[1]}/preview" class="admin-thumb video-thumb" style="pointer-events:none;"></iframe>`;
+                    typeLabel = 'Google Drive';
+                }
+            }
+            
+            if (!thumbHtml) {
+                thumbHtml = `<video src="${u}" class="admin-thumb video-thumb" muted></video>`;
+            }
+
+            return `
             <div class="admin-item">
-                <video src="${v.url}" class="admin-thumb video-thumb" muted></video>
+                ${thumbHtml}
                 <div class="admin-item-info">
                     <strong>${v.title || 'No Title'}</strong>
-                    <small>Direct Video</small>
+                    <small>${typeLabel}</small>
                 </div>
                 <button class="admin-delete-btn" onclick="deleteVideo('${key}')">
                     <i class="fas fa-trash-alt"></i>
                 </button>
             </div>
-        `).join('');
+            `;
+        }).join('');
     });
 }
 

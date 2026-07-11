@@ -106,9 +106,32 @@ function loadGalleryFirebase() {
             });
 
             videos.forEach(v => {
+                let videoHtml = '';
+                let u = v.url || '';
+                
+                // Check if YouTube
+                if (u.includes('youtube.com') || u.includes('youtu.be')) {
+                    const ytMatch = u.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([a-zA-Z0-9_-]{11})/);
+                    if (ytMatch && ytMatch[1]) {
+                        videoHtml = `<iframe src="https://www.youtube.com/embed/${ytMatch[1]}" frameborder="0" allowfullscreen loading="lazy"></iframe>`;
+                    }
+                } 
+                // Check if Google Drive
+                else if (u.includes('drive.google.com')) {
+                    const driveMatch = u.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+                    if (driveMatch && driveMatch[1]) {
+                        videoHtml = `<iframe src="https://drive.google.com/file/d/${driveMatch[1]}/preview" frameborder="0" allowfullscreen loading="lazy"></iframe>`;
+                    }
+                }
+                
+                // Fallback to normal video player (for direct .mp4 links)
+                if (!videoHtml) {
+                    videoHtml = `<video src="${u}" controls controlsList="nodownload"></video>`;
+                }
+
                 html += `
                 <div class="gallery-item video-item fade-in-up">
-                    <video src="${v.url}" controls controlsList="nodownload"></video>
+                    ${videoHtml}
                     <div class="gallery-caption">${v.title || ''}</div>
                 </div>`;
             });
