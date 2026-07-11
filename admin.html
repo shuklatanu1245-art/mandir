@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel — श्री ओंकारेश्वर महादेव मंदिर</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@300;400;600;800&family=Poppins:wght@300;400;600&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="admin-page">
+
+    <!-- NAV -->
+    <nav class="navbar">
+        <div class="nav-mantra">🕉️ ॥ जय श्री राम ॥ 🕉️</div>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link"><i class="fas fa-home"></i> होम</a>
+            <a href="services.html" class="nav-link"><i class="fas fa-hands-praying"></i> सेवाएँ</a>
+            <a href="admin.html" class="nav-link active"><i class="fas fa-lock"></i> Admin</a>
+        </div>
+    </nav>
+
+    <!-- LOGIN SCREEN -->
+    <div id="loginScreen" class="admin-login">
+        <div class="login-box">
+            <div class="login-icon">🔐</div>
+            <h2>Admin Login</h2>
+            <p>पैनल में प्रवेश के लिए पासवर्ड डालें</p>
+            <div class="login-form">
+                <input type="password" id="adminPassword" placeholder="पासवर्ड दर्ज करें" autocomplete="off">
+                <button onclick="adminLogin()" class="btn-primary">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </button>
+            </div>
+            <p id="loginError" class="login-error"></p>
+        </div>
+    </div>
+
+    <!-- ADMIN DASHBOARD (Hidden until login) -->
+    <div id="adminDashboard" class="admin-dashboard" style="display:none;">
+
+        <div class="admin-header fade-in-up">
+            <h1><i class="fas fa-cogs"></i> Admin Panel</h1>
+            <p>यहाँ से फोटो, वीडियो और सेवाएँ जोड़ें या हटाएँ</p>
+            <button onclick="adminLogout()" class="btn-logout"><i class="fas fa-sign-out-alt"></i> Logout</button>
+        </div>
+
+        <!-- TABS -->
+        <div class="admin-tabs fade-in-up">
+            <button class="tab-btn active" onclick="switchTab('photos')"><i class="fas fa-image"></i> फोटो</button>
+            <button class="tab-btn" onclick="switchTab('videos')"><i class="fas fa-video"></i> वीडियो</button>
+            <button class="tab-btn" onclick="switchTab('services')"><i class="fas fa-hands-praying"></i> सेवाएँ</button>
+        </div>
+
+        <!-- ═══════ PHOTOS TAB ═══════ -->
+        <div id="tab-photos" class="tab-content active fade-in-up">
+            <div class="admin-card">
+                <h3><i class="fas fa-plus-circle"></i> नई फोटो जोड़ें</h3>
+                <div class="admin-form">
+                    <div class="admin-form-row">
+                        <div class="admin-input-group">
+                            <label>फोटो URL (Image Link)</label>
+                            <input type="url" id="photoUrl" placeholder="https://example.com/photo.jpg">
+                        </div>
+                        <div class="admin-input-group">
+                            <label>शीर्षक (Caption)</label>
+                            <input type="text" id="photoCaption" placeholder="फोटो का शीर्षक">
+                        </div>
+                    </div>
+                    <button onclick="addPhoto()" class="btn-primary" id="addPhotoBtn"><i class="fas fa-plus"></i> फोटो जोड़ें</button>
+                </div>
+            </div>
+            <div class="admin-card">
+                <h3><i class="fas fa-images"></i> जोड़ी गई फोटो</h3>
+                <div id="photosList" class="admin-items-list"></div>
+            </div>
+        </div>
+
+        <!-- ═══════ VIDEOS TAB ═══════ -->
+        <div id="tab-videos" class="tab-content fade-in-up">
+            <div class="admin-card">
+                <h3><i class="fas fa-plus-circle"></i> नया वीडियो जोड़ें</h3>
+                <p class="admin-hint">वीडियो का डायरेक्ट लिंक डालें (जैसे: Google Drive या कोई भी .mp4 लिंक)</p>
+                <div class="admin-form">
+                    <div class="admin-form-row">
+                        <div class="admin-input-group">
+                            <label>YouTube Video URL</label>
+                            <input type="url" id="videoUrl" placeholder="https://www.youtube.com/watch?v=...">
+                        </div>
+                        <div class="admin-input-group">
+                            <label>शीर्षक (Title)</label>
+                            <input type="text" id="videoTitle" placeholder="वीडियो का शीर्षक">
+                        </div>
+                    </div>
+                    <button onclick="addVideo()" class="btn-primary" id="addVideoBtn"><i class="fas fa-plus"></i> वीडियो जोड़ें</button>
+                </div>
+            </div>
+            <div class="admin-card">
+                <h3><i class="fas fa-film"></i> जोड़े गए वीडियो</h3>
+                <div id="videosList" class="admin-items-list"></div>
+            </div>
+        </div>
+
+        <!-- ═══════ SERVICES TAB ═══════ -->
+        <div id="tab-services" class="tab-content fade-in-up">
+            <div class="admin-card">
+                <h3><i class="fas fa-plus-circle"></i> नई सेवा जोड़ें</h3>
+                <div class="admin-form">
+                    <div class="admin-form-row">
+                        <div class="admin-input-group">
+                            <label>Emoji / Icon</label>
+                            <input type="text" id="serviceEmoji" placeholder="🔥" maxlength="4">
+                        </div>
+                        <div class="admin-input-group" style="flex:3">
+                            <label>सेवा का नाम</label>
+                            <input type="text" id="serviceName" placeholder="सेवा का नाम लिखें">
+                        </div>
+                    </div>
+                    <div class="admin-input-group full">
+                        <label>विवरण (Description)</label>
+                        <textarea id="serviceDesc" rows="2" placeholder="सेवा का विवरण लिखें"></textarea>
+                    </div>
+                    <button onclick="addService()" class="btn-primary"><i class="fas fa-plus"></i> सेवा जोड़ें</button>
+                </div>
+            </div>
+            <div class="admin-card">
+                <h3><i class="fas fa-list"></i> जोड़ी गई सेवाएँ</h3>
+                <div id="servicesList" class="admin-items-list"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
+    <script src="firebase-config.js"></script>
+    <script src="script.js"></script>
+    <script src="admin.js"></script>
+</body>
+</html>
