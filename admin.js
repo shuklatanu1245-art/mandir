@@ -84,9 +84,17 @@ function listenPhotos() {
             container.innerHTML = '<p class="admin-empty">कोई फोटो नहीं जोड़ी गई है।</p>';
             return;
         }
-        container.innerHTML = Object.entries(data).map(([key, p]) => `
+        container.innerHTML = Object.entries(data).map(([key, p]) => {
+            let u = p.url || '';
+            if (u.includes('drive.google.com')) {
+                const driveMatch = u.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+                if (driveMatch && driveMatch[1]) {
+                    u = `https://drive.google.com/uc?export=view&id=${driveMatch[1]}`;
+                }
+            }
+            return `
             <div class="admin-item">
-                <img src="${p.url}" alt="${p.caption || ''}" class="admin-thumb">
+                <img src="${u}" alt="${p.caption || ''}" class="admin-thumb">
                 <div class="admin-item-info">
                     <strong>${p.caption || 'No Caption'}</strong>
                     <small>${p.url.substring(0, 50)}...</small>
@@ -95,7 +103,8 @@ function listenPhotos() {
                     <i class="fas fa-trash-alt"></i>
                 </button>
             </div>
-        `).join('');
+            `;
+        }).join('');
     });
 }
 

@@ -98,9 +98,17 @@ function loadGalleryFirebase() {
             let html = '';
 
             photos.forEach(p => {
+                let u = p.url || '';
+                // Convert Google Drive link to direct image link
+                if (u.includes('drive.google.com')) {
+                    const driveMatch = u.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+                    if (driveMatch && driveMatch[1]) {
+                        u = `https://drive.google.com/uc?export=view&id=${driveMatch[1]}`;
+                    }
+                }
                 html += `
                 <div class="gallery-item fade-in-up">
-                    <img src="${p.url}" alt="${p.caption || ''}" loading="lazy">
+                    <img src="${u}" alt="${p.caption || ''}" loading="lazy">
                     <div class="gallery-caption">${p.caption || ''}</div>
                 </div>`;
             });
