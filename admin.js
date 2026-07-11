@@ -2,19 +2,21 @@
 //  ADMIN PANEL — Firebase Realtime DB
 // ══════════════════════════════════════
 
-const ADMIN_PASSWORD = 'om123'; // ← पासवर्ड बदलें
+const ADMIN_EMAIL = 'devshukla1245@gmail.com';
+const ADMIN_PASSWORD = 'shiv5454';
 
 // ─── LOGIN / LOGOUT ───
 function adminLogin() {
+    const email = document.getElementById('adminEmail').value.trim();
     const pw = document.getElementById('adminPassword').value;
     const err = document.getElementById('loginError');
-    if (pw === ADMIN_PASSWORD) {
+    if (email === ADMIN_EMAIL && pw === ADMIN_PASSWORD) {
         sessionStorage.setItem('adminLoggedIn', 'true');
         document.getElementById('loginScreen').style.display = 'none';
         document.getElementById('adminDashboard').style.display = 'block';
         loadAllAdmin();
     } else {
-        err.textContent = '❌ गलत पासवर्ड! कृपया पुनः प्रयास करें।';
+        err.textContent = '❌ गलत ईमेल या पासवर्ड! कृपया पुनः प्रयास करें।';
     }
 }
 
@@ -22,7 +24,9 @@ function adminLogout() {
     sessionStorage.removeItem('adminLoggedIn');
     document.getElementById('loginScreen').style.display = 'flex';
     document.getElementById('adminDashboard').style.display = 'none';
+    if(document.getElementById('adminEmail')) document.getElementById('adminEmail').value = '';
     document.getElementById('adminPassword').value = '';
+    document.getElementById('loginError').textContent = '';
 }
 
 // Auto-login check
