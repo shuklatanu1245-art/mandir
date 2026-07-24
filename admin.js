@@ -86,6 +86,7 @@ function loadAllAdmin() {
     listenPhotos();
     listenVideos();
     listenServices();
+    listenSeo();
 }
 
 async function addPhoto() {
@@ -278,3 +279,32 @@ function listenServices() {
         `).join('');
     });
 }
+
+// ═══════════════════════════
+//  SEO SETTINGS — Firebase
+// ═══════════════════════════
+function saveSeo() {
+    const title = document.getElementById('seoTitle').value.trim();
+    const desc = document.getElementById('seoDesc').value.trim();
+    const keywords = document.getElementById('seoKeywords').value.trim();
+    
+    const btn = document.getElementById('saveSeoBtn');
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> सेव हो रहा है...';
+    
+    db.ref('seo').set({ title, desc, keywords, updatedAt: Date.now() })
+        .then(() => alert('✅ SEO सेटिंग्स सफलतापूर्वक सेव हो गईं!'))
+        .catch(err => alert('❌ Error: ' + err.message))
+        .finally(() => btn.innerHTML = '<i class="fas fa-save"></i> SEO सेव करें');
+}
+
+function listenSeo() {
+    db.ref('seo').on('value', (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+            if(document.getElementById('seoTitle')) document.getElementById('seoTitle').value = data.title || '';
+            if(document.getElementById('seoDesc')) document.getElementById('seoDesc').value = data.desc || '';
+            if(document.getElementById('seoKeywords')) document.getElementById('seoKeywords').value = data.keywords || '';
+        }
+    });
+}
+

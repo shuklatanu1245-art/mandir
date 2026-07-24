@@ -51,6 +51,7 @@
             <button class="tab-btn active" onclick="switchTab('photos')"><i class="fas fa-image"></i> फोटो</button>
             <button class="tab-btn" onclick="switchTab('videos')"><i class="fas fa-video"></i> वीडियो</button>
             <button class="tab-btn" onclick="switchTab('services')"><i class="fas fa-hands-praying"></i> सेवाएँ</button>
+            <button class="tab-btn" onclick="switchTab('seo')"><i class="fas fa-search"></i> SEO Settings</button>
         </div>
 
         <!-- ═══════ PHOTOS TAB ═══════ -->
@@ -128,6 +129,29 @@
             <div class="admin-card">
                 <h3><i class="fas fa-list"></i> जोड़ी गई सेवाएँ</h3>
                 <div id="servicesList" class="admin-items-list"></div>
+            </div>
+        </div>
+
+        <!-- ═══════ SEO TAB ═══════ -->
+        <div id="tab-seo" class="tab-content fade-in-up">
+            <div class="admin-card">
+                <h3><i class="fas fa-search"></i> SEO Settings (Search Engine Optimization)</h3>
+                <p class="admin-hint">Google Search के लिए टाइटल, कीवर्ड्स और डिस्क्रिप्शन सेट करें। (परिवर्तन दिखने में कुछ दिन लग सकते हैं)</p>
+                <div class="admin-form">
+                    <div class="admin-input-group full">
+                        <label>Website Title (वेबसाइट का नाम)</label>
+                        <input type="text" id="seoTitle" placeholder="उदा: श्री ओंकारेश्वर महादेव मंदिर वैष्णवी धाम - Gwalior">
+                    </div>
+                    <div class="admin-input-group full">
+                        <label>Meta Description (वेबसाइट का विवरण)</label>
+                        <textarea id="seoDesc" rows="3" placeholder="उदा: ग्वालियर के मेहदवा आश्रम स्थित प्रसिद्ध ओंकारेश्वर महादेव मंदिर..."></textarea>
+                    </div>
+                    <div class="admin-input-group full">
+                        <label>Keywords (कीवर्ड्स)</label>
+                        <textarea id="seoKeywords" rows="2" placeholder="उदा: Omkareshwar Gwalior, ओंकारेश्वर महादेव मंदिर, Gwalior Temple"></textarea>
+                    </div>
+                    <button onclick="saveSeo()" class="btn-primary" id="saveSeoBtn"><i class="fas fa-save"></i> SEO सेव करें</button>
+                </div>
             </div>
         </div>
 

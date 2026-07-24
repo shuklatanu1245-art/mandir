@@ -184,3 +184,39 @@ function loadCustomServicesFirebase() {
         });
     });
 }
+
+// ─── DYNAMIC SEO LOADER ───
+document.addEventListener('DOMContentLoaded', () => {
+    if (typeof db === 'undefined') return;
+    db.ref('seo').once('value').then(snapshot => {
+        const seoData = snapshot.val();
+        if (seoData) {
+            if (seoData.title) {
+                document.title = seoData.title;
+                const ogTitle = document.querySelector('meta[property="og:title"]');
+                if (ogTitle) ogTitle.setAttribute('content', seoData.title);
+            }
+            if (seoData.desc) {
+                let metaDesc = document.querySelector('meta[name="description"]');
+                if (!metaDesc) {
+                    metaDesc = document.createElement('meta');
+                    metaDesc.name = "description";
+                    document.head.appendChild(metaDesc);
+                }
+                metaDesc.setAttribute('content', seoData.desc);
+                
+                const ogDesc = document.querySelector('meta[property="og:description"]');
+                if (ogDesc) ogDesc.setAttribute('content', seoData.desc);
+            }
+            if (seoData.keywords) {
+                let metaKeys = document.querySelector('meta[name="keywords"]');
+                if (!metaKeys) {
+                    metaKeys = document.createElement('meta');
+                    metaKeys.name = "keywords";
+                    document.head.appendChild(metaKeys);
+                }
+                metaKeys.setAttribute('content', seoData.keywords);
+            }
+        }
+    }).catch(e => console.error('SEO Load Error:', e));
+});
