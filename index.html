@@ -22,6 +22,7 @@
         <div class="nav-links">
             <a href="index.html" class="nav-link active"><i class="fas fa-home"></i> होम</a>
             <a href="services.html" class="nav-link"><i class="fas fa-hands-praying"></i> सेवाएँ</a>
+            <a href="index.html#gallery" class="nav-link"><i class="fas fa-images"></i> गैलरी</a>
             <a href="admin.html" class="nav-link nav-admin"><i class="fas fa-lock"></i> Admin</a>
         </div>
     </nav>
@@ -138,23 +139,16 @@
         </div>
     </section>
 
-    <!-- SPECIAL VIDEO SECTION -->
-    <section class="video-highlight-section fade-in-up" id="video-darshan" style="padding: 60px 20px; background: var(--surface); text-align: center;">
-        <div class="section-header">
+    <!-- GALLERY (Loaded from Admin Panel via Firebase) -->
+    <section class="gallery-section" id="gallery">
+        <div class="section-header fade-in-up">
             <div class="decor-line"></div>
-            <h2 class="section-title">विशेष दर्शन</h2>
+            <h2 class="section-title">फोटो एवं वीडियो गैलरी</h2>
             <div class="decor-line"></div>
         </div>
-        <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; max-width: 1200px; margin: 0 auto;">
-            <!-- First Video / GIF -->
-            <div style="flex: 1; min-width: 300px; max-width: 500px; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5); border: 2px solid var(--primary); background: #000;">
-                <iframe src="https://www.kapwing.com/e/6a51b415666c1b26c1ad4005?autoplay=true&loop=true&muted=false" width="100%" height="450" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
-            </div>
-            
-            <!-- Second Video / GIF -->
-            <div style="flex: 1; min-width: 300px; max-width: 500px; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5); border: 2px solid var(--primary); background: #000;">
-                <iframe src="https://www.kapwing.com/e/6a51abf48c394427b015517d?autoplay=true&loop=true&muted=false" width="100%" height="450" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
-            </div>
+        <div class="gallery-grid" id="galleryGrid">
+            <!-- Dynamically loaded from Firebase -->
+            <p class="gallery-empty" id="galleryEmpty">गैलरी में अभी कोई फोटो/वीडियो नहीं है।</p>
         </div>
     </section>
 
