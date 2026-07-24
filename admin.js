@@ -11,7 +11,7 @@ function adminLogin() {
     const pw = document.getElementById('adminPassword').value;
     const err = document.getElementById('loginError');
     if (email === ADMIN_EMAIL && pw === ADMIN_PASSWORD) {
-        sessionStorage.setItem('adminLoggedIn', 'true');
+        localStorage.setItem('adminLoggedIn', 'true');
         document.getElementById('loginScreen').style.display = 'none';
         document.getElementById('adminDashboard').style.display = 'block';
         loadAllAdmin();
@@ -21,7 +21,7 @@ function adminLogin() {
 }
 
 function adminLogout() {
-    sessionStorage.removeItem('adminLoggedIn');
+    localStorage.removeItem('adminLoggedIn');
     document.getElementById('loginScreen').style.display = 'flex';
     document.getElementById('adminDashboard').style.display = 'none';
     if(document.getElementById('adminEmail')) document.getElementById('adminEmail').value = '';
@@ -31,7 +31,7 @@ function adminLogout() {
 
 // Auto-login check
 document.addEventListener('DOMContentLoaded', () => {
-    if (sessionStorage.getItem('adminLoggedIn') === 'true') {
+    if (localStorage.getItem('adminLoggedIn') === 'true') {
         document.getElementById('loginScreen').style.display = 'none';
         document.getElementById('adminDashboard').style.display = 'block';
         loadAllAdmin();
