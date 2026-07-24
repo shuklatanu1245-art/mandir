@@ -52,25 +52,63 @@ function switchTab(tabName) {
     event.currentTarget.classList.add('active');
 }
 
-// ─── LOAD ALL ───
+// ─── CLOUDINARY UPLOAD ───
+const CLOUD_NAME = 'ol1ejvbp';
+const API_KEY = '233933968681329';
+const API_SECRET = 'y8uLxH3cyK4u5PjvE0UHZuCGOV8';
+
+async function generateCloudinarySignature(timestamp) {
+    const str = `timestamp=${timestamp}${API_SECRET}`;
+    const buffer = new TextEncoder().encode(str);
+    const hash = await crypto.subtle.digest('SHA-1', buffer);
+    return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+async function uploadToCloudinary(file, resourceType) {
+    const timestamp = Math.floor(Date.now() / 1000);
+    const signature = await generateCloudinarySignature(timestamp);
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('api_key', API_KEY);
+    formData.append('timestamp', timestamp);
+    formData.append('signature', signature);
+    
+    const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/${resourceType}/upload`, {
+        method: 'POST',
+        body: formData
+    });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error.message);
+    return data.secure_url;
+}
+
 function loadAllAdmin() {
     listenPhotos();
     listenVideos();
     listenServices();
 }
 
-function addPhoto() {
-    const url = document.getElementById('photoUrl').value.trim();
+async function addPhoto() {
+    const fileInput = document.getElementById('photoFile');
     const caption = document.getElementById('photoCaption').value.trim();
-    if (!url) { alert('कृपया फोटो URL डालें!'); return; }
+    if (fileInput.files.length === 0) { alert('कृपया एक फोटो फाइल चुनें!'); return; }
     
-    db.ref('photos').push({ url, caption, createdAt: Date.now() })
-        .then(() => {
-            document.getElementById('photoUrl').value = '';
-            document.getElementById('photoCaption').value = '';
-            alert('✅ फोटो सफलतापूर्वक जोड़ी गई!');
-        })
-        .catch(err => alert('❌ Error: ' + err.message));
+    const btn = document.getElementById('addPhotoBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
+    
+    try {
+        const url = await uploadToCloudinary(fileInput.files[0], 'image');
+        await db.ref('photos').push({ url, caption, createdAt: Date.now() });
+        fileInput.value = '';
+        document.getElementById('photoCaption').value = '';
+        alert('✅ फोटो सफलतापूर्वक अपलोड की गई!');
+    } catch (err) {
+        alert('❌ Error: ' + err.message);
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-upload"></i> अपलोड करें';
+    }
 }
 
 function deletePhoto(key) {
@@ -115,18 +153,27 @@ function listenPhotos() {
 // ═══════════════════════════
 //  VIDEOS — Firebase
 // ═══════════════════════════
-function addVideo() {
-    const url = document.getElementById('videoUrl').value.trim();
+async function addVideo() {
+    const fileInput = document.getElementById('videoFile');
     const title = document.getElementById('videoTitle').value.trim();
-    if (!url) { alert('कृपया Video URL डालें!'); return; }
+    if (fileInput.files.length === 0) { alert('कृपया एक वीडियो फाइल चुनें!'); return; }
     
-    db.ref('videos').push({ url, title, createdAt: Date.now() })
-        .then(() => {
-            document.getElementById('videoUrl').value = '';
-            document.getElementById('videoTitle').value = '';
-            alert('✅ वीडियो सफलतापूर्वक जोड़ा गया!');
-        })
-        .catch(err => alert('❌ Error: ' + err.message));
+    const btn = document.getElementById('addVideoBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
+    
+    try {
+        const url = await uploadToCloudinary(fileInput.files[0], 'video');
+        await db.ref('videos').push({ url, title, createdAt: Date.now() });
+        fileInput.value = '';
+        document.getElementById('videoTitle').value = '';
+        alert('✅ वीडियो सफलतापूर्वक अपलोड किया गया!');
+    } catch (err) {
+        alert('❌ Error: ' + err.message);
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-upload"></i> अपलोड करें';
+    }
 }
 
 function deleteVideo(key) {

@@ -57,18 +57,19 @@
         <div id="tab-photos" class="tab-content active fade-in-up">
             <div class="admin-card">
                 <h3><i class="fas fa-plus-circle"></i> नई फोटो जोड़ें</h3>
+                <p class="admin-hint">अपनी डिवाइस/गैलरी से सीधे फोटो चुनें</p>
                 <div class="admin-form">
                     <div class="admin-form-row">
                         <div class="admin-input-group">
-                            <label>फोटो URL (Image Link)</label>
-                            <input type="url" id="photoUrl" placeholder="https://example.com/photo.jpg">
+                            <label>Photo File</label>
+                            <input type="file" id="photoFile" accept="image/*">
                         </div>
                         <div class="admin-input-group">
-                            <label>शीर्षक (Caption)</label>
-                            <input type="text" id="photoCaption" placeholder="फोटो का शीर्षक">
+                            <label>Caption</label>
+                            <input type="text" id="photoCaption" placeholder="फोटो के बारे में लिखें...">
                         </div>
                     </div>
-                    <button onclick="addPhoto()" class="btn-primary" id="addPhotoBtn"><i class="fas fa-plus"></i> फोटो जोड़ें</button>
+                    <button onclick="addPhoto()" class="btn-primary" id="addPhotoBtn"><i class="fas fa-upload"></i> अपलोड करें</button>
                 </div>
             </div>
             <div class="admin-card">
@@ -81,12 +82,12 @@
         <div id="tab-videos" class="tab-content fade-in-up">
             <div class="admin-card">
                 <h3><i class="fas fa-plus-circle"></i> नया वीडियो जोड़ें</h3>
-                <p class="admin-hint">वीडियो का डायरेक्ट लिंक डालें (जैसे: Google Drive या कोई भी .mp4 लिंक)</p>
+                <p class="admin-hint">अपनी डिवाइस/गैलरी से सीधे वीडियो चुनें</p>
                 <div class="admin-form">
                     <div class="admin-form-row">
                         <div class="admin-input-group">
-                            <label>YouTube Video URL</label>
-                            <input type="url" id="videoUrl" placeholder="https://www.youtube.com/watch?v=...">
+                            <label>Video File</label>
+                            <input type="file" id="videoFile" accept="video/*">
                         </div>
                         <div class="admin-input-group">
                             <label>शीर्षक (Title)</label>
